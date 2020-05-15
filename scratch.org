@@ -1,0 +1,131 @@
+#+STARTUP: odd
+#+STARTUP: hidestars
+
+* Maxima
+
+  #+name: test-maxima
+  #+header: :exports results
+  #+header: :var x=1.3121254
+  #+begin_src maxima 
+  programmode: false;
+  print(12^x);
+  #+end_src
+
+  #+RESULTS: test-maxima
+  : 26.06280316745401
+
+  #+name: solve-maxima
+  #+header: :exports results
+  #+begin_src maxima :results output
+  programmode: false;
+  eq: x**2-16 = 0;
+  solution: solve(eq, x);
+  print(solution);
+  #+end_src
+
+  #+RESULTS: solve-maxima
+  : solve: solution:
+  :                                     x = - 4
+  :                                      x = 4
+  : [%t1, %t2] 
+
+  #+name: 3d-maxima
+  #+header: :file images/maxima-3d.png
+  #+header: :exports results
+  #+header: :results graphics
+  #+begin_src maxima 
+  programmode: false;
+  plot3d(atan(-x^2+y^3/4),[x,-4,4],[y,-4,4],[grid,50,50],[gnuplot_pm3d,true]);
+  #+end_src
+
+  #+RESULTS: 3d-maxima
+
+  #+name: solve-maxima2
+  #+header: :exports none
+  #+begin_src maxima :results raw
+  tex(exp(-x)/x);
+  #+end_src
+
+  #+RESULTS: solve-maxima2
+  $${{e^ {- x }}\over{x}}$$
+
+* Gnuplot
+
+  #+tblname: data-table
+  | x | y1 | y2 |
+  |---+----+----|
+  | 0 |  3 |  6 |
+  | 1 |  4 |  7 |
+  | 2 |  5 |  8 |
+
+  #+begin_src gnuplot :var data=data-table :file output.png
+  set title "This Title Goes at the Top"
+  set xlabel "This is the X Axis"
+  set ylabel "This is the Y Axis"
+  f(x) = x**2
+  plot f(x)
+  #+end_src
+
+  #+RESULTS:
+  [[file:output.png]]
+
+* LaTeX
+
+  #+name: hello-world
+  #+BEGIN_SRC latex
+  \LaTeX
+  #+END_SRC
+  #+RESULTS: hello-world
+  #+begin_export latex
+  \LaTeX
+  #+end_export
+
+  #+LATEX_HEADER: \usepackage{tikz}
+
+  First execute the second code block, to define the convenience macro
+  and to set the required new variables in ob-latex.el.  Then export to
+  HTML and to pdf to see the tree exported as an SVG image and as
+  embedded tikz respectively.
+
+*** Tikz test
+
+  Here's a tree, exported to both html and pdf.
+
+  #+header: :file (by-backend (html "tree.svg") (t 'nil))
+  #+header: :imagemagick
+  #+header: :results (by-backend (pdf "latex") (t "raw"))
+  #+begin_src latex
+    \usetikzlibrary{trees}
+    \begin{tikzpicture}
+      \node [circle, draw, fill=red!20] at (0,0) {1}
+      child { node [circle, draw, fill=blue!30] {2}
+	child { node [circle, draw, fill=green!30] {3} }
+	child { node [circle, draw, fill=yellow!30] {4} }};
+    \end{tikzpicture}
+  #+end_src
+
+  #+RESULTS:
+  \usetikzlibrary{trees}
+  \begin{tikzpicture}
+    \node [circle, draw, fill=red!20] at (0,0) {1}
+    child { node [circle, draw, fill=blue!30] {2}
+      child { node [circle, draw, fill=green!30] {3} }
+      child { node [circle, draw, fill=yellow!30] {4} }};
+  \end{tikzpicture}
+
+*** Comment Setup
+
+  #+begin_src emacs-lisp :results silent
+    (setq org-babel-latex-htlatex "htlatex")
+    (defmacro by-backend (&rest body)
+      `(case (if (boundp 'backend) (org-export-backend-name backend) nil) ,@body))
+  #+end_src
+
+* Calc
+
+  #+BEGIN_SRC calc :var x=5 :var y=2
+  2+a*x**y
+  #+END_SRC
+
+  #+RESULTS:
+  : 25 a + 2
